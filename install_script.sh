@@ -2,7 +2,8 @@ read -p " ¿Instalar docker|portainer|mongodb|mongodb compass? (y/n) " dockerfla
 read -p " ¿Instalar vscode? (y/n) " vscodeflag
 read -p " ¿Instalar golang? (y/n) " goflag
 read -p " ¿Instalar nodejs? (y/n) " nodeflag
-read -p " ¿Instalar zsh? (y/n) " zhsflag
+read -p " ¿Instalar gitkraken (y/n) " krakenflag
+read -p " ¿Instalar zsh + plugins? (y/n) " zhsflag
 
 echo "Actualizando Repos"
 sudo apt update
@@ -77,11 +78,33 @@ then
     sudo apt -y install nodejs
 fi
 
+
+if [ $krakenflag = "y" ] || [ $krakenflag= "s" ] || [ $krakenflag = "yes" ]
+then
+    wget https://release.gitkraken.com/linux/gitkraken-amd64.deb
+    sudo apt install gitkraken-amd64.deb
+    sudo rm gitkraken-amd64.deb
+fi
+
 if [ $zhsflag = "y" ] || [ $zhsflag = "s" ] || [ $zhsflag = "yes" ]
 then
     echo "Instalando zsh"
     sudo apt -y install zsh
     #Cambiar shell por defecto
     sudo chsh -s /usr/bin/zsh $USER
+    # Instalar oh my zsh
+    wget https://github.com/robbyrussell/oh-my-zsh/raw/master/tools/install.sh -O - | zsh
+    # Copiar plantilla en zshrc
+    cp ~/.oh-my-zsh/templates/zshrc.zsh-template ~/.zshrc
+    # Plugin de syntax highlighting
+    git clone https://github.com/zsh-users/zsh-syntax-highlighting.git ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-syntax-highlighting
+    # Plugin de autosuggestions
+    git clone https://github.com/zsh-users/zsh-autosuggestions ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-autosuggestions
+    # Activar plugins
+    sudo sed -i -e 's/plugins=(git)/plugins=(git zsh-syntax-highlighting zsh-autosuggestions sudo)/g' ~/.zshrc
+    #Instalar powerlevel10k
+    git clone --depth=1 https://github.com/romkatv/powerlevel10k.git ${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}/themes/powerlevel10k
+    # Activar powerlevel10k
+    sudo sed -i -e 's/ZSH_THEME="robbyrussell"/ZSH_THEME="powerlevel10k/powerlevel10k"/g' ~/.zshrc
 fi
 
