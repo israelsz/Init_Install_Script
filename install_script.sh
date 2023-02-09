@@ -3,7 +3,7 @@ read -p " ¿Instalar vscode? (y/n) " vscodeflag
 read -p " ¿Instalar golang? (y/n) " goflag
 read -p " ¿Instalar nodejs? (y/n) " nodeflag
 read -p " ¿Instalar gitkraken (y/n) " krakenflag
-read -p " ¿Instalar zsh + plugins? (y/n) " zhsflag
+read -p " ¿Instalar zsh (y/n) " zhsflag
 
 echo "Actualizando Repos"
 sudo apt update
@@ -40,7 +40,7 @@ then
     echo "Instalando mongodb compass"
     wget https://downloads.mongodb.com/compass/mongodb-compass_1.35.0_amd64.deb
     sudo dpkg -i mongodb-compass_1.35.0_amd64.deb
-    sudo apt --fix-broken install
+    sudo apt --fix-broken install -y
 
     sudo rm mongodb-compass_1.35.0_amd64.deb
 
@@ -55,8 +55,8 @@ then
     sudo install -o root -g root -m 644 microsoft.gpg /etc/apt/trusted.gpg.d/
     sudo sh -c 'echo "deb [arch=amd64] https://packages.microsoft.com/repos/vscode stable main" > /etc/apt/sources.list.d/vscode.list'
     sudo apt update
-    sudo apt install code
-    sudo apt --fix-broken install
+    sudo apt -y install code
+    sudo apt --fix-broken install -y
 
 fi
 
@@ -74,7 +74,7 @@ fi
 if [ $nodeflag = "y" ] || [ $nodeflag = "s" ] || [ $nodeflag = "yes" ]
 then
     echo "Instalando nodejs"
-    sudo apt install software-properties-common apt-transport-https ca-certificates gnupg2 curl build-essential
+    sudo apt -y install software-properties-common apt-transport-https ca-certificates gnupg2 curl build-essential
     curl -sL https://deb.nodesource.com/setup_18.x | sudo -E bash -
     sudo apt update
     sudo apt -y install nodejs
@@ -94,6 +94,6 @@ then
     echo "Instalando zsh"
     sudo apt -y install zsh
     #Cambiar shell por defecto
-    sudo chsh -s $(which zsh)
+    chsh -s $(which zsh)
 fi
 

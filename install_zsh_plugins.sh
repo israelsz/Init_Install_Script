@@ -10,4 +10,5 @@ sudo sed -i -e 's/plugins=(git)/plugins=(git zsh-syntax-highlighting zsh-autosug
 #Instalar powerlevel10k
 git clone --depth=1 https://github.com/romkatv/powerlevel10k.git ${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}/themes/powerlevel10k
 # Activar powerlevel10k
-sudo sed -i -e 's/ZSH_THEME="robbyrussell"/ZSH_THEME="powerlevel10k/powerlevel10k"/g' ~/.zshrc
+sudo sed -i -e 's+ZSH_THEME="robbyrussell"+ZSH_THEME="powerlevel10k/powerlevel10k"+g' ~/.zshrc
+
