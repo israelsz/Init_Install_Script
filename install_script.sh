@@ -95,21 +95,5 @@ then
     sudo apt -y install zsh
     #Cambiar shell por defecto
     sudo chsh -s $(which zsh)
-    #Crear archivo zshrc vacio
-    touch ~/.zshrc
-    # Instalar oh my zsh
-    sh -c "$(wget https://raw.github.com/ohmyzsh/ohmyzsh/master/tools/install.sh -O -)"
-    # Copiar plantilla en zshrc
-    cp ~/.oh-my-zsh/templates/zshrc.zsh-template ~/.zshrc
-    # Plugin de syntax highlighting
-    git clone https://github.com/zsh-users/zsh-syntax-highlighting.git ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-syntax-highlighting
-    # Plugin de autosuggestions
-    git clone https://github.com/zsh-users/zsh-autosuggestions ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-autosuggestions
-    # Activar plugins
-    sudo sed -i -e 's/plugins=(git)/plugins=(git zsh-syntax-highlighting zsh-autosuggestions sudo)/g' ~/.zshrc
-    #Instalar powerlevel10k
-    git clone --depth=1 https://github.com/romkatv/powerlevel10k.git ${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}/themes/powerlevel10k
-    # Activar powerlevel10k
-    sudo sed -i -e 's/ZSH_THEME="robbyrussell"/ZSH_THEME="powerlevel10k/powerlevel10k"/g' ~/.zshrc
 fi
 
