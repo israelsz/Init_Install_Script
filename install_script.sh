@@ -27,19 +27,20 @@ then
     sudo apt -y install docker-ce docker-ce-cli containerd.io docker-compose-plugin
 
     # Añadir al usuario docker al grupo de root
+    sudo groupadd docker
     sudo usermod -aG docker $USER
-    newgrp docker
 
     echo "Instalando portainer"
-    docker volume create portainer_data
-    docker run -d -p 8000:8000 -p 9443:9443 --name portainer --restart=always -v /var/run/docker.sock:/var/run/docker.sock -v portainer_data:/data portainer/portainer-ce:latest
+    sudo docker volume create portainer_data
+    sudo docker run -d -p 8000:8000 -p 9443:9443 --name portainer --restart=always -v /var/run/docker.sock:/var/run/docker.sock -v portainer_data:/data portainer/portainer-ce:latest
 
     echo "Instalando mongodb v3.6 via docker"
-    docker run --name mongodb -d -p 27017:27017 mongo:3.6
+    sudo docker run --name mongodb -d -p 27017:27017 mongo:3.6
 
     echo "Instalando mongodb compass"
     wget https://downloads.mongodb.com/compass/mongodb-compass_1.35.0_amd64.deb
     sudo dpkg -i mongodb-compass_1.35.0_amd64.deb
+    sudo apt --fix-broken install
 
     sudo rm mongodb-compass_1.35.0_amd64.deb
 
@@ -48,14 +49,15 @@ fi
 if [ $vscodeflag = "y" ] || [ $vscodeflag = "s" ] || [ $vscodeflag = "yes" ]
 then
     echo "Instalando VScode"
-    sudo apt-get -y install wget
-
-    sudo apt-get update
+    sudo apt update
+    sudo apt install apt-transport-https
     curl https://packages.microsoft.com/keys/microsoft.asc | gpg --dearmor > microsoft.gpg
     sudo install -o root -g root -m 644 microsoft.gpg /etc/apt/trusted.gpg.d/
     sudo sh -c 'echo "deb [arch=amd64] https://packages.microsoft.com/repos/vscode stable main" > /etc/apt/sources.list.d/vscode.list'
-    sudo apt-get update
-    sudo apt-get -y install code
+    sudo apt update
+    sudo apt install code
+    sudo apt --fix-broken install
+
 fi
 
 
@@ -82,7 +84,8 @@ fi
 if [ $krakenflag = "y" ] || [ $krakenflag= "s" ] || [ $krakenflag = "yes" ]
 then
     wget https://release.gitkraken.com/linux/gitkraken-amd64.deb
-    sudo apt install gitkraken-amd64.deb
+    sudo dpkg -i gitkraken-amd64.deb
+    sudo apt --fix-broken install
     sudo rm gitkraken-amd64.deb
 fi
 
@@ -91,9 +94,11 @@ then
     echo "Instalando zsh"
     sudo apt -y install zsh
     #Cambiar shell por defecto
-    sudo chsh -s /usr/bin/zsh $USER
+    sudo chsh -s $(which zsh)
+    #Crear archivo zshrc vacio
+    touch ~/.zshrc
     # Instalar oh my zsh
-    wget https://github.com/robbyrussell/oh-my-zsh/raw/master/tools/install.sh -O - | zsh
+    sh -c "$(wget https://raw.github.com/ohmyzsh/ohmyzsh/master/tools/install.sh -O -)"
     # Copiar plantilla en zshrc
     cp ~/.oh-my-zsh/templates/zshrc.zsh-template ~/.zshrc
     # Plugin de syntax highlighting
